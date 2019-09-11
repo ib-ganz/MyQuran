@@ -3,7 +3,6 @@
 
 package ib.ganz.myquran.kotlinstuff
 
-import ib.ganz.sipp_on.kotlinstuff.then
 import org.joda.time.*
 import java.util.*
 import java.lang.IllegalStateException

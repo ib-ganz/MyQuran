@@ -1,4 +1,4 @@
-package ib.ganz.sipp_on.kotlinstuff
+package ib.ganz.myquran.kotlinstuff
 
 import android.app.Activity
 import android.content.Intent
@@ -10,7 +10,7 @@ import java.lang.reflect.ParameterizedType
 import java.lang.reflect.Type
 import android.graphics.BitmapFactory
 import android.util.Base64
-import ib.ganz.myquran.halper.Gxon
+import ib.ganz.myquran.helper.Gxon
 
 fun (() -> Unit).doIf(b: Boolean) {
     b.then { this() }
@@ -101,4 +101,19 @@ private class ListOfJson<T> internal constructor(wrapper: Class<T>) : Parameteri
     override fun getOwnerType(): Type? {
         return null
     }
+}
+
+fun Int.toArabicNumber(): String = toString().toArabicNumber()
+
+fun String.toArabicNumber(): String {
+    val arabicChars = charArrayOf('٠', '١', '٢', '٣', '٤', '٥', '٦', '٧', '٨', '٩')
+    val builder = StringBuilder()
+    for (i in 0 until this.length) {
+        if (Character.isDigit(this[i])) {
+            builder.append(arabicChars[this[i].toInt() - 48])
+        } else {
+            builder.append(this[i])
+        }
+    }
+    return builder.toString()
 }

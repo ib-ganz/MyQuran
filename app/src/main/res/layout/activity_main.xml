@@ -1,48 +1,57 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout
+<android.support.design.widget.CoordinatorLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
+    android:fitsSystemWindows="true"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context=".activity.MainActivity">
 
-    <ImageView
-        android:id="@+id/iBg"
-        android:scaleType="centerCrop"
-        android:src="@drawable/bg_1"
+    <RelativeLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent"/>
+        android:layout_height="match_parent">
 
-    <View
-        android:background="@drawable/grad_black_top_bottom"
-        android:layout_width="match_parent"
-        android:layout_height="80dp"/>
+        <ImageView
+            android:id="@+id/iBg"
+            android:scaleType="centerCrop"
+            android:src="@drawable/bg_1"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"/>
 
-    <ImageView
-        android:id="@+id/bSetting"
-        android:layout_alignParentEnd="true"
-        android:layout_margin="8dp"
-        android:padding="5dp"
-        android:background="@drawable/ripple_circle"
-        android:src="@drawable/ic_setting"
-        android:layout_width="36dp"
-        android:layout_height="36dp"/>
+        <View
+            android:background="@drawable/grad_black_top_bottom"
+            android:layout_width="match_parent"
+            android:layout_height="80dp"/>
 
-    <ImageView
-        android:id="@+id/bCompass"
-        android:layout_toStartOf="@id/bSetting"
-        android:layout_marginTop="8dp"
-        android:padding="5dp"
-        android:background="@drawable/ripple_circle"
-        android:src="@drawable/ic_compass"
-        android:layout_width="36dp"
-        android:layout_height="36dp"/>
+        <ImageView
+            android:id="@+id/bSetting"
+            android:layout_alignParentEnd="true"
+            android:layout_margin="8dp"
+            android:padding="5dp"
+            android:background="@drawable/ripple_circle"
+            android:src="@drawable/ic_setting"
+            android:layout_width="36dp"
+            android:layout_height="36dp"/>
 
-    <ib.ganz.myquran.customclass.JadwalView
-        android:id="@+id/jadwalView"
-        android:layout_marginTop="75dp"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"/>
+        <ImageView
+            android:id="@+id/bCompass"
+            android:layout_toStartOf="@id/bSetting"
+            android:layout_marginTop="8dp"
+            android:padding="5dp"
+            android:background="@drawable/ripple_circle"
+            android:src="@drawable/ic_compass"
+            android:layout_width="36dp"
+            android:layout_height="36dp"/>
 
-</RelativeLayout>
+        <ib.ganz.myquran.customclass.JadwalView
+            android:id="@+id/jadwalView"
+            android:layout_marginTop="75dp"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"/>
+
+    </RelativeLayout>
+
+    <include layout="@layout/view_last_read" />
+
+</android.support.design.widget.CoordinatorLayout>

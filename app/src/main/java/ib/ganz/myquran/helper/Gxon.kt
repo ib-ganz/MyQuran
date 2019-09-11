@@ -1,4 +1,4 @@
-package ib.ganz.myquran.halper
+package ib.ganz.myquran.helper
 
 import com.google.gson.Gson
 

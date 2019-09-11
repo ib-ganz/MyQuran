@@ -38,12 +38,14 @@
             android:id="@+id/tSubuh"
             android:text="Subuh"
             android:textColor="@color/colorPrimaryDark"
-            android:fontFamily="sans-serif-light"
+            android:fontFamily="@font/segoe_ui_semilight"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"/>
 
         <TextView
             android:id="@+id/tJamSubuh"
+            android:text="12:43"
+            android:fontFamily="@font/segoe_ui_bold"
             android:textColor="@color/colorPrimaryDark"
             android:textStyle="bold"
             android:layout_width="wrap_content"
@@ -82,12 +84,14 @@
             android:id="@+id/tDzuhur"
             android:text="Dzuhur"
             android:textColor="@color/colorPrimaryDark"
-            android:fontFamily="sans-serif-light"
+            android:fontFamily="@font/segoe_ui_semilight"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"/>
 
         <TextView
             android:id="@+id/tJamDzuhur"
+            android:text="12:43"
+            android:fontFamily="@font/segoe_ui_bold"
             android:textColor="@color/colorPrimaryDark"
             android:textStyle="bold"
             android:layout_width="wrap_content"
@@ -126,12 +130,14 @@
             android:id="@+id/tAshar"
             android:text="Ashar"
             android:textColor="@color/colorPrimaryDark"
-            android:fontFamily="sans-serif-light"
+            android:fontFamily="@font/segoe_ui_semilight"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"/>
 
         <TextView
             android:id="@+id/tJamAshar"
+            android:text="12:43"
+            android:fontFamily="@font/segoe_ui_bold"
             android:textColor="@color/colorPrimaryDark"
             android:textStyle="bold"
             android:layout_width="wrap_content"
@@ -170,12 +176,14 @@
             android:id="@+id/tMagrib"
             android:text="Magrib"
             android:textColor="@color/colorPrimaryDark"
-            android:fontFamily="sans-serif-light"
+            android:fontFamily="@font/segoe_ui_semilight"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"/>
 
         <TextView
             android:id="@+id/tJamMagrib"
+            android:text="12:43"
+            android:fontFamily="@font/segoe_ui_bold"
             android:textColor="@color/colorPrimaryDark"
             android:textStyle="bold"
             android:layout_width="wrap_content"
@@ -214,12 +222,14 @@
             android:id="@+id/tIsya"
             android:text="Isya'"
             android:textColor="@color/colorPrimaryDark"
-            android:fontFamily="sans-serif-light"
+            android:fontFamily="@font/segoe_ui_semilight"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"/>
 
         <TextView
             android:id="@+id/tJamIsya"
+            android:text="12:43"
+            android:fontFamily="@font/segoe_ui_bold"
             android:textColor="@color/colorPrimaryDark"
             android:textStyle="bold"
             android:layout_width="wrap_content"

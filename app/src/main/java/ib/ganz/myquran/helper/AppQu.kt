@@ -1,4 +1,4 @@
-package ib.ganz.myquran.halper
+package ib.ganz.myquran.helper
 //
 //import android.support.multidex.MultiDexApplication
 //import ib.ganz.sipp_on.manager.SessionManager
