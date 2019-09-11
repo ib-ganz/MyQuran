@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+              android:layout_width="match_parent"
+              android:layout_height="wrap_content">
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="4dp"
+        android:layout_marginTop="4dp"
+        android:background="@drawable/shadow_bottom_to_top"/>
+
+    <View
+        android:layout_below="@id/iHeader"
+        android:layout_width="match_parent"
+        android:layout_height="4dp"
+        android:background="@drawable/shadow_top_to_bottom"/>
+
+    <ImageView
+        android:id="@+id/iHeader"
+        android:layout_marginTop="8dp"
+        android:adjustViewBounds="true"
+        android:src="@drawable/img_header"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"/>
+
+    <ImageView
+        android:id="@+id/iSurat"
+        android:layout_centerHorizontal="true"
+        android:layout_alignTop="@id/iHeader"
+        android:tint="@color/colorMarine"
+        android:layout_marginTop="6dp"
+        android:src="@drawable/zz_28"
+        android:adjustViewBounds="true"
+        android:layout_width="wrap_content"
+        android:layout_height="32dp"/>
+
+    <TextView
+        android:id="@+id/tSurat"
+        android:fontFamily="@font/segoe_ui_semibold"
+        android:layout_marginTop="3dp"
+        android:textSize="16sp"
+        android:textColor="@color/colorMarine"
+        android:text="Al-Fatihah (7 Ayat)"
+        android:layout_centerHorizontal="true"
+        android:layout_below="@id/iSurat"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"/>
+
+    <ImageView
+        android:id="@+id/iBismillah"
+        android:layout_centerHorizontal="true"
+        android:layout_below="@id/iHeader"
+        android:layout_marginTop="16dp"
+        android:adjustViewBounds="true"
+        android:src="@drawable/img_bismilah"
+        android:layout_width="wrap_content"
+        android:layout_height="35dp"/>
+
+</RelativeLayout>

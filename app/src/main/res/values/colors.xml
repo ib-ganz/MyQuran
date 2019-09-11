@@ -3,6 +3,7 @@
     <color name="colorPrimary">#3EF03E</color>
     <color name="colorPrimaryDark">#33CC33</color>
     <color name="colorAccent">#8BC34A</color>
+    <color name="colorMarine">#00759C</color>
 
     <color name="colorWhite">#FFFFFF</color>
     <color name="colorWhiteTrans">#AAFFFFFF</color>

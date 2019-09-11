@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
               xmlns:app="http://schemas.android.com/apk/res-auto"
               android:id="@+id/bottomSheet"
               android:layout_width="match_parent"
@@ -7,7 +7,6 @@
               android:orientation="vertical"
               app:behavior_hideable="false"
               app:behavior_peekHeight="60dp"
-              android:gravity="center_horizontal"
               app:layout_behavior="android.support.design.widget.BottomSheetBehavior">
 
     <LinearLayout
@@ -42,13 +41,68 @@
 
     </LinearLayout>
 
+    <View
+        android:id="@+id/vStatusBar"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"/>
+
+    <RelativeLayout
+        android:id="@+id/vToolbar"
+        android:layout_below="@id/vStatusBar"
+        android:alpha="0"
+        android:background="@color/colorMarine"
+        android:layout_width="match_parent"
+        android:layout_height="60dp">
+
+        <ImageView
+            android:id="@+id/iSurat"
+            android:tint="@color/colorWhite"
+            android:src="@drawable/zz_28"
+            android:adjustViewBounds="true"
+            android:layout_marginTop="8dp"
+            android:layout_centerHorizontal="true"
+            android:layout_width="wrap_content"
+            android:layout_height="24dp"/>
+
+        <TextView
+            android:id="@+id/tSurat"
+            android:layout_centerHorizontal="true"
+            android:layout_below="@id/iSurat"
+            android:layout_marginTop="2dp"
+            android:textColor="@color/colorWhite"
+            android:textSize="18sp"
+            android:fontFamily="@font/segoe_ui"
+            android:text="Al-Fatihah: 154"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"/>
+
+        <Switch
+            android:id="@+id/swSimpan"
+            android:layout_centerVertical="true"
+            android:layout_marginStart="8dp"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"/>
+
+        <ImageView
+            android:id="@+id/bSettingQuran"
+            android:layout_centerVertical="true"
+            android:layout_alignParentEnd="true"
+            android:layout_margin="8dp"
+            android:padding="5dp"
+            android:background="@drawable/ripple_circle"
+            android:src="@drawable/ic_setting"
+            android:layout_width="36dp"
+            android:layout_height="36dp"/>
+
+    </RelativeLayout>
+
     <android.support.v7.widget.RecyclerView
         android:id="@+id/rvAyat"
+        android:layout_below="@id/vToolbar"
         android:background="@color/colorWhite"
-        android:padding="8dp"
         android:clipToPadding="false"
         app:layoutManager="android.support.v7.widget.LinearLayoutManager"
         android:layout_width="match_parent"
         android:layout_height="match_parent"/>
 
-</LinearLayout>
+</RelativeLayout>

@@ -11,6 +11,8 @@ import java.lang.reflect.Type
 import android.graphics.BitmapFactory
 import android.util.Base64
 import ib.ganz.myquran.helper.Gxon
+import android.graphics.Rect
+
 
 fun (() -> Unit).doIf(b: Boolean) {
     b.then { this() }
@@ -116,4 +118,16 @@ fun String.toArabicNumber(): String {
         }
     }
     return builder.toString()
+}
+
+fun Activity.getStatusBarHeight(): Int {
+    var result = 0
+    val resourceId = resources.getIdentifier("status_bar_height", "dimen", "android")
+    if (resourceId > 0) {
+        result = resources.getDimensionPixelSize(resourceId)
+    }
+    return result
+//    val rectangle = Rect()
+//    this.window.apply { decorView.getWindowVisibleDisplayFrame(rectangle) }
+//    return rectangle.top
 }

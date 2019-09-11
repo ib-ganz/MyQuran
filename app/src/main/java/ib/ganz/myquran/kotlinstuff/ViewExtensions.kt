@@ -62,6 +62,8 @@ infix fun ImageView.useImage(b: Bitmap) = setImageBitmap(b)
 
 infix fun ImageView.useImage(d: Drawable) = setImageDrawable(d)
 
+fun ImageView.loadAsset(f: () -> String) = getBitmapFromAsset(f)?.let { useImage(it) }
+
 //fun ImageView.loadImage(c: Context, s: String) {
 //    Picasso.with(c).load(ApiClient.IMG_DIR + s).into(this)
 //}
