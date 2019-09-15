@@ -50,6 +50,63 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"/>
 
+        <RelativeLayout
+            android:layout_above="@id/ct"
+            android:layout_marginBottom="16dp"
+            android:layout_centerHorizontal="true"
+            android:layout_width="220dp"
+            android:layout_height="40dp">
+
+            <TextView
+                android:id="@+id/bSearch"
+                android:text="Pencarian Ayat"
+                android:textSize="16sp"
+                android:background="@drawable/sel_button_main"
+                android:textColor="@color/colorWhite"
+                android:fontFamily="@font/segoe_ui_semibold"
+                android:gravity="center"
+                android:paddingBottom="2dp"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"/>
+
+            <ImageView
+                android:layout_marginStart="12dp"
+                android:layout_centerVertical="true"
+                android:src="@drawable/ic_search"
+                android:layout_width="24dp"
+                android:layout_height="24dp"/>
+
+        </RelativeLayout>
+
+        <RelativeLayout
+            android:id="@+id/ct"
+            android:layout_marginBottom="150dp"
+            android:layout_alignParentBottom="true"
+            android:layout_centerHorizontal="true"
+            android:layout_width="220dp"
+            android:layout_height="40dp">
+
+            <TextView
+                android:id="@+id/bTafsir"
+                android:text="Kajian Tafsir"
+                android:textSize="16sp"
+                android:background="@drawable/sel_button_main"
+                android:textColor="@color/colorWhite"
+                android:fontFamily="@font/segoe_ui_semibold"
+                android:gravity="center"
+                android:paddingBottom="2dp"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"/>
+
+            <ImageView
+                android:layout_marginStart="12dp"
+                android:layout_centerVertical="true"
+                android:src="@drawable/ic_book"
+                android:layout_width="24dp"
+                android:layout_height="24dp"/>
+
+        </RelativeLayout>
+
     </RelativeLayout>
 
     <include layout="@layout/view_last_read" />

@@ -12,9 +12,11 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme.NoActionBar">
+        <activity android:name=".activity.PencarianActivity">
+        </activity>
         <activity
-            android:theme="@style/AppTheme.Transparent"
-            android:name=".activity.MainActivity">
+            android:name=".activity.MainActivity"
+            android:theme="@style/AppTheme.Transparent">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN"/>
 

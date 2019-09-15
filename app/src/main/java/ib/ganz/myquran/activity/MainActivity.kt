@@ -38,6 +38,8 @@ class MainActivity : BaseActivity() {
     private fun initViews() {
         bSetting.click {  }
         bCompass.click {  }
+        bSearch.click { PencarianActivity.go(a) }
+        bTafsir.click {  }
         jadwalView.run {
             compositeDisposable(compositeDisposable)
             onFinished { BackgroundManager.init(iBg, it) }
