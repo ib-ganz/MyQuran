@@ -2,6 +2,7 @@ package ib.ganz.myquran.arabword
 
 import android.content.Context
 import ib.ganz.myquran.database.AyatData
+import kotlinx.coroutines.*
 import java.lang.Exception
 
 object WordProcessor {
@@ -28,7 +29,7 @@ object WordProcessor {
         }
     }
 
-    fun process(c: Context, s: String, fw: Wrapper.() -> Unit) {
+    fun process(c: Context, cs: CoroutineScope, s: String, fw: Wrapper.() -> Unit) {
 
         val w = Wrapper().apply(fw)
 
@@ -46,46 +47,22 @@ object WordProcessor {
             w.doError("Format kata salah")
         }
 
-        val lAyat = AyatData.getRegex(c, f, a, l, "")
-        lAyat.forEach { ayatData ->
-            val ws = WordSpanner(ayatData).apply { setSpan(c, f, a, l, "") }
-            wordCount += ws.words.size
-        }
+        cs.launch {
 
-        w.doSuccess(lAyat, wordCount)
-    }
+            val lAyat = cs.async(Dispatchers.IO) {
+                val regex = Regexer.generate(f, a, l, "")
+                val lAyat = AyatData.getByRegex(c, f, a, l, regex)
 
-    fun old1process(c: Context, s: String, fw: Wrapper.() -> Unit) {
+                lAyat.forEach { ayatData ->
+                    val ws = WordSpanner(ayatData, regex).apply { setSpan(c) }
+                    wordCount += ws.words.size
+                }
 
-        val w = Wrapper().apply(fw)
-
-        var wordCount = 0
-        var f = ""
-        var a = ""
-        var l = ""
-
-        try {
-            f = s[0].toString()
-            a = s[1].toString()
-            l = s[2].toString()
-        }
-        catch (e: Exception) {
-            w.doError("Format kata salah")
-        }
-
-        val lForms = getAllForms(f, a, l)
-        val lAyat = mutableListOf<AyatData>()
-
-        lForms.forEach { form ->
-            val r = AyatData.getLike(c, form)
-            r.forEach { ayatData ->
-                val ws = WordSpanner(ayatData).apply { setSpan(c, f, a, l, form) }
-                wordCount += ws.words.size
+                lAyat
             }
-            lAyat.addAll(r)
-        }
 
-        w.doSuccess(lAyat, wordCount)
+            w.doSuccess(lAyat.await(), wordCount)
+        }
     }
 
     private fun getAllForms(f: String, a: String, l: String): MutableList<String> {

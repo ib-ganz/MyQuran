@@ -48,6 +48,10 @@ infix fun Calendar.setMinute(i: Int): Calendar {
     set(Calendar.MINUTE, i)
     return this
 }
+infix fun Calendar.setSecond(i: Int): Calendar {
+    set(Calendar.SECOND, i)
+    return this
+}
 
 class DateQu(private val cal: Calendar) {
 

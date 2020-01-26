@@ -1,171 +1,117 @@
 package ib.ganz.myquran.activity
 
 import android.annotation.SuppressLint
+import android.annotation.TargetApi
 import android.app.ProgressDialog
+import android.content.Context
+import android.os.Build
 import android.os.Bundle
+import android.os.VibrationEffect
+import android.os.Vibrator
+import android.speech.tts.TextToSpeech
 import android.support.v4.app.FragmentManager
 import android.support.v7.app.AppCompatActivity
 import android.view.View
-import android.widget.EditText
-import android.widget.TextView
-import android.widget.Toast
-import io.reactivex.Single
-import io.reactivex.annotations.CheckReturnValue
-import io.reactivex.annotations.SchedulerSupport
-import io.reactivex.disposables.CompositeDisposable
-import io.reactivex.disposables.Disposable
-import io.reactivex.functions.Consumer
-import io.reactivex.internal.observers.ConsumerSingleObserver
+import ib.ganz.myquran.kotlinstuff.click
+import ib.ganz.myquran.kotlinstuff.then
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.Job
+import java.util.*
+import kotlin.coroutines.CoroutineContext
 
 /**
  * Created by limakali on 3/17/2018.
  */
 
 @SuppressLint("Registered")
-open class BaseActivity : AppCompatActivity() {
+open class BaseActivity : AppCompatActivity(), CoroutineScope {
 
-    protected lateinit var progressDialog: ProgressDialog
-    protected lateinit var compositeDisposable: CompositeDisposable
-    public lateinit var fm: FragmentManager
+    private lateinit var job: Job
+    override val coroutineContext: CoroutineContext
+        get() = job + Dispatchers.Main
+
+    private lateinit var progressDialog: ProgressDialog
+    private lateinit var fm: FragmentManager
+    private lateinit var tts: TextToSpeech
     protected lateinit var a: BaseActivity
+    private var clickedView: String = ""
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         progressDialog = ProgressDialog(this)
-        compositeDisposable = CompositeDisposable()
         fm = supportFragmentManager
         a = this
+        job = Job()
+
+        tts = TextToSpeech(a, TextToSpeech.OnInitListener {
+            (it == TextToSpeech.SUCCESS).then { onTtsReady() }
+        }).apply { language = Locale("ind") }
     }
+
+    protected open fun onTtsReady() { }
+
+    protected fun vibrate() {
+        val v = getSystemService(Context.VIBRATOR_SERVICE) as Vibrator
+
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+            v.vibrate(VibrationEffect.createOneShot(40, VibrationEffect.DEFAULT_AMPLITUDE))
+        } else {
+            v.vibrate(longArrayOf(0, 40), -1)
+        }
+    }
+
+    protected fun speak(s: () -> String) {
+        tts.speak(s(), TextToSpeech.QUEUE_FLUSH, null)
+    }
+
+    protected fun View.onClick(speech: String, f: (() -> Unit)? = null) = click {
+        val id = this.javaClass.simpleName + this.id
+        if (clickedView == id) {
+            clickedView = ""
+            f?.invoke()
+        }
+        else {
+            clickedView = id
+            speak { speech }
+        }
+        vibrate()
+    }
+
+    // ##########################################################################
 
     override fun onDestroy() {
         super.onDestroy()
-        if (!compositeDisposable.isDisposed) compositeDisposable.dispose()
+        job.cancel()
     }
 
-    inline fun <reified T> load(s: Single<T>, noinline block: (T) -> Unit) {
-        when (T::class) {
-            List::class -> {
-                cd().add(s.subscribe({
-                    onSuccess(it as List<*>)
-                    block(it)
-                }, ::handleError))
-            }
-            else -> {
-                lcd().add(s.subscribe({
-                    onSuccess()
-                    block(it)
-                }, ::handleError))
-            }
-        }
+    override fun attachBaseContext(base: Context) {
+        super.attachBaseContext(updateBaseContextLocale(base))
     }
 
-    fun ocd(): CompositeDisposable {
-        return compositeDisposable
+    private fun updateBaseContextLocale(context: Context): Context {
+        val language = "in"
+        val locale = Locale(language)
+        Locale.setDefault(locale)
+
+        return if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
+            updateResourcesLocale(context, locale)
+        } else updateResourcesLocaleLegacy(context, locale)
+
     }
 
-    fun cd(): CompositeDisposable {
-
-        return compositeDisposable
+    @TargetApi(Build.VERSION_CODES.N)
+    private fun updateResourcesLocale(context: Context, locale: Locale): Context {
+        val configuration = context.getResources().getConfiguration()
+        configuration.setLocale(locale)
+        return context.createConfigurationContext(configuration)
     }
 
-    fun lcd(): CompositeDisposable {
-        showLoading()
-        return compositeDisposable
-    }
-
-    fun toast(s: String) {
-        Toast.makeText(this, s, Toast.LENGTH_SHORT).show()
-    }
-
-    fun toastKoneksi() {
-        toast("Periksa koneksi Anda!")
-    }
-
-    fun onSuccess() {
-        hideLoading()
-    }
-
-    fun onSuccess(b: List<*>) // otomatis show no data if r is empty
-    {
-        onSuccess()
-    }
-
-    fun onSuccess(toast: String) // otomatis toast
-    {
-        onSuccess()
-        toast(toast)
-    }
-
-    fun handleError(e: Throwable) {
-        hideLoading()
-        toastKoneksi()
-    }
-
-    fun toggleVisibility(b: Boolean, vararg vs: View) {
-        if (b)
-            show(*vs)
-        else
-            hide(*vs)
-    }
-
-    fun show(b: Boolean, vararg vs: View) {
-        if (b) show(*vs)
-    }
-
-    fun show(vararg vs: View?) {
-        for (v in vs) {
-            if (v != null && v.visibility != View.VISIBLE) v.visibility = View.VISIBLE
-        }
-    }
-
-    fun hide(b: Boolean, vararg vs: View) {
-        if (b) hide(*vs)
-    }
-
-    fun hide(vararg vs: View?) {
-        for (v in vs) {
-            if (v != null && v.visibility != View.GONE) v.visibility = View.GONE
-        }
-    }
-
-    fun showLoading() {
-        if (!progressDialog.isShowing) progressDialog.show()
-    }
-
-    fun hideLoading() {
-        if (progressDialog.isShowing) progressDialog.dismiss()
-    }
-
-    fun isEmpty(t: TextView): Boolean {
-        return txt(t).isEmpty()
-    }
-
-    fun txt(e: TextView): String {
-        return e.text.toString().trim { it <= ' ' }
-    }
-
-    fun check(vararg edts: EditText): Boolean {
-        for (e in edts) {
-            e.error = null
-        }
-
-        for (e in edts) {
-            if (e.text.toString().trim { it <= ' ' }.isEmpty()) {
-                e.requestFocus()
-                e.error = "Isi semua field!"
-                return false
-            }
-        }
-        return true
-    }
-
-    @CheckReturnValue
-    @SchedulerSupport(SchedulerSupport.NONE)
-    fun <T> Single<T>.subs(block: (T) -> Unit): Disposable {
-        val onSuccess: Consumer<in T> = Consumer { block(it) }
-        val onError: Consumer<in Throwable> = Consumer { handleError(it) }
-        val s = ConsumerSingleObserver<T>(onSuccess, onError)
-        subscribe(s)
-        return s
+    private fun updateResourcesLocaleLegacy(context: Context, locale: Locale): Context {
+        val resources = context.getResources()
+        val configuration = resources.getConfiguration()
+        configuration.locale = locale
+        resources.updateConfiguration(configuration, resources.getDisplayMetrics())
+        return context
     }
 }

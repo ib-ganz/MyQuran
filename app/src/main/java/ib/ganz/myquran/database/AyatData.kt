@@ -2,7 +2,6 @@ package ib.ganz.myquran.database
 
 import android.content.Context
 import android.text.SpannableStringBuilder
-import ib.ganz.myquran.arabword.QueryRegex
 import java.util.regex.Pattern
 
 class AyatData(s: Array<String>) {
@@ -20,9 +19,10 @@ class AyatData(s: Array<String>) {
         fun getFromVoice(c: Context, ss: List<String>): MutableList<AyatData> {
             val l = mutableListOf<AyatData>()
             for (s in ss) {
-                val q = "SELECT * FROM ayat a JOIN surat s ON a.id_surat = s.id_surat WHERE a.mentahan LIKE '%$s%'"
+                val q = "SELECT a.id_ayat, a.id_surat, a.nomor_ayat, a.text, a.mentahan, s.* FROM ayat a JOIN surat s ON a.id_surat = s.id_surat WHERE a.no_hamza LIKE '%$s%'"
                 SQLiteDataManager.read(c, q)?.forEach {
-                    l.add(AyatData(it))
+                    val k = l.find { y -> y.idAyat == it[0] }
+                    if (k == null) l.add(AyatData(it))
                 }
             }
             return l
@@ -37,13 +37,12 @@ class AyatData(s: Array<String>) {
             return l
         }
 
-        fun getRegex(c: Context, f: String, a: String, l: String, form: String): MutableList<AyatData> {
+        fun getByRegex(c: Context, f: String, a: String, l: String, regex: String): MutableList<AyatData> {
             val list = mutableListOf<AyatData>()
-            val q = "SELECT * FROM ayat a JOIN surat s ON a.id_surat = s.id_surat WHERE a.text LIKE '%$f%' AND a.text LIKE '%$a%' AND a.text LIKE '%$l%'"
-            val reg = QueryRegex.generate(f, a, l, form)
+            val q = "SELECT * FROM ayat a JOIN surat s ON a.id_surat = s.id_surat"
 
             SQLiteDataManager.read(c, q)?.forEach {
-                val matcher = Pattern.compile(reg).matcher(it[3])
+                val matcher = Pattern.compile(regex).matcher(it[3])
                 if (matcher.find()) {
                     list.add(AyatData(it))
                 }

@@ -72,8 +72,14 @@ public class SQLiteHelper extends SQLiteOpenHelper
 	{
 	    try 
 	    {
+	        String path = dbName;
+
+            SQLiteDatabase database = this.getReadableDatabase();
+            path = database.getPath();
+            database.close();
+
 	    	InputStream mInputStream = context.getAssets().open(dbName);
-	        File outFileName = context.getDatabasePath(dbName);
+	        File outFileName = context.getDatabasePath(path);
 	        OutputStream mOutputStream = new FileOutputStream(outFileName);
 	        
 	        byte[] buffer = new byte[1024];
@@ -106,4 +112,9 @@ public class SQLiteHelper extends SQLiteOpenHelper
 		
 	}
 
+	@Override
+	public void onOpen(SQLiteDatabase db) {
+		super.onOpen(db);
+		db.disableWriteAheadLogging();
+	}
 }

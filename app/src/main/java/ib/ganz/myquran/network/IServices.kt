@@ -1,13 +1,20 @@
-//package ib.ganz.sipp_on.network
-//
-//import ib.ganz.sipp_on.dataclass.*
-//import io.reactivex.Single
-//import okhttp3.MultipartBody
-//import okhttp3.ResponseBody
-//import retrofit2.Response
-//import retrofit2.http.*
-//
-//interface IServices {
+package ib.ganz.myquran.network
+
+import okhttp3.ResponseBody
+import retrofit2.Response
+import retrofit2.http.GET
+import retrofit2.http.Path
+import retrofit2.http.Streaming
+
+interface IServices {
+
+    @GET("https://download.quranicaudio.com/verses/Sudais/mp3/{noSurat}{noAyat}.mp3")
+    @Streaming
+    suspend fun download(
+        @Path("noSurat") noSurat: String,
+        @Path("noAyat") noAyat: String
+    ): ResponseBody
+}
 //
 //    @POST("login.php")
 //    @FormUrlEncoded fun login(

@@ -14,8 +14,16 @@ import ib.ganz.myquran.database.AyatData
 import ib.ganz.myquran.kotlinstuff.*
 import kotlinx.android.synthetic.main.fragment_search_kata.*
 import kotlinx.android.synthetic.main.item_search_result.*
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.Job
+import kotlin.coroutines.CoroutineContext
 
-class SearchKataFragment : Fragment() {
+class SearchKataFragment : BaseFragment(), CoroutineScope {
+
+    private lateinit var job: Job
+    override val coroutineContext: CoroutineContext
+        get() = Dispatchers.Main + job
 
     private val pd: ProgressDialog by lazy { ProgressDialog(activity!!) }
     private val lAyat = mutableListOf<AyatData>()
@@ -23,9 +31,14 @@ class SearchKataFragment : Fragment() {
         adapter(activity!!, lAyat, R.layout.item_search_result) {
             lAyat[adapterPosition].run {
                 tAyat.text = spannableText
-                tLokasi.text = "$namaSurat:$nomorAyat"
+                tLokasi.text = "$namaSurat $idSurat:$nomorAyat"
             }
         }
+    }
+
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        job = Job()
     }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
@@ -38,7 +51,7 @@ class SearchKataFragment : Fragment() {
         rvResult.adapter = searchAdapter
         bSearch.click {
             pd.show()
-            WordProcessor.process(activity!!, eInput.str()) {
+            WordProcessor.process(activity!!, this, eInput.str()) {
                 onSuccess { list, count ->
                     pd.dismiss()
                     tCount.text = "Count: $count"
@@ -52,5 +65,10 @@ class SearchKataFragment : Fragment() {
                 }
             }
         }
+    }
+
+    override fun onDestroy() {
+        job.cancel()
+        super.onDestroy()
     }
 }

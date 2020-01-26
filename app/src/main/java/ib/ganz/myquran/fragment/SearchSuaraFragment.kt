@@ -1,34 +1,32 @@
 package ib.ganz.myquran.fragment
 
+import android.annotation.SuppressLint
 import android.app.Activity
 import android.content.Intent
 import android.os.Bundle
 import android.speech.RecognizerIntent
-import android.support.v4.app.Fragment
+import android.support.v7.widget.DividerItemDecoration
 import android.support.v7.widget.RecyclerView
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import ib.ganz.myquran.R
 import ib.ganz.myquran.database.AyatData
+import ib.ganz.myquran.helper.Mp3Player
 import ib.ganz.myquran.kotlinstuff.adapter
-import ib.ganz.myquran.kotlinstuff.click
+import ib.ganz.myquran.kotlinstuff.beGone
 import ib.ganz.myquran.kotlinstuff.replaceWith
 import ib.ganz.myquran.kotlinstuff.toArabicNumber
 import kotlinx.android.synthetic.main.fragment_search_suara.*
 import kotlinx.android.synthetic.main.item_search_result.*
+import kotlinx.coroutines.launch
 
-class SearchSuaraFragment : Fragment() {
+
+@SuppressLint("SetTextI18n")
+class SearchSuaraFragment : BaseFragment() {
 
     private val lAyat = mutableListOf<AyatData>()
-    private val searchAdapter: RecyclerView.Adapter<*> by lazy {
-        adapter(activity!!, lAyat, R.layout.item_search_result) {
-            lAyat[adapterPosition].run {
-                tAyat.text = "$text    \uFD3F${nomorAyat.toArabicNumber()}\uFD3E    "
-                tLokasi.text = "$namaSurat:$nomorAyat"
-            }
-        }
-    }
+    private val searchAdapter: RecyclerView.Adapter<*> by lazy { buildSearchAdapter() }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         return inflater.inflate(R.layout.fragment_search_suara, container, false)
@@ -36,7 +34,9 @@ class SearchSuaraFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        initViews()
+        bStart.onClick("cari ayat", { Mp3Player.stop() }) { rekam() }
+        rvSearch.adapter = searchAdapter
+        rvSearch.addItemDecoration(DividerItemDecoration(a, RecyclerView.VERTICAL))
     }
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
@@ -44,20 +44,34 @@ class SearchSuaraFragment : Fragment() {
         if (requestCode == 900 && resultCode == Activity.RESULT_OK && data != null) {
             val res = data.getStringArrayListExtra(RecognizerIntent.EXTRA_RESULTS)
 
-            lAyat.replaceWith(AyatData.getFromVoice(activity!!, res))
+            lAyat.replaceWith(AyatData.getFromVoice(a, res))
             searchAdapter.notifyDataSetChanged()
+
+            val wRes = if (lAyat.size > 0) "Ditemukan sebanyak ${lAyat.size} ayat" else "Ayat tidak ditemukan"
+            speak { wRes }
+            tRes.text = wRes
+            tKey.text = "dengan kata kunci ${res.joinToString(", ")}"
+            tFirst.beGone()
         }
     }
 
-    private fun initViews() {
-        bStart.click { rekam() }
-        rvSearch.adapter = searchAdapter
+    private fun buildSearchAdapter() = adapter(activity!!, lAyat, R.layout.item_search_result) {
+        val la = lAyat[adapterPosition]
+        tAyat.text = "${la.text}    \uFD3F${la.nomorAyat.toArabicNumber()}\uFD3E    "
+        tLokasi.text = "${la.namaSurat}: ${la.nomorAyat}"
+
+        val speech = "surat ${la.namaSurat.replace("`", "")} ayat ${la.nomorAyat}"
+        root.onClick(speech, adapterPosition, { Mp3Player.stop() }) {
+            launch {
+                Mp3Player.play(la) { speak { it } }
+            }
+        }
     }
 
     private fun rekam() {
         val i = Intent(RecognizerIntent.ACTION_RECOGNIZE_SPEECH)
         i.putExtra(RecognizerIntent.EXTRA_LANGUAGE_MODEL, RecognizerIntent.LANGUAGE_MODEL_FREE_FORM)
-        i.putExtra(RecognizerIntent.EXTRA_PROMPT, "Silahkan baca ayat")
+        i.putExtra(RecognizerIntent.EXTRA_PROMPT, "Silahkan baca potongan ayat")
         i.putExtra(RecognizerIntent.EXTRA_LANGUAGE, "ar-AE")
         startActivityForResult(i, 900)
     }

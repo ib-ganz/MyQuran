@@ -1,4 +1,4 @@
-package ib.ganz.emaklon.helper
+package ib.ganz.myquran.helper
 
 import android.app.Activity
 import android.os.Handler
