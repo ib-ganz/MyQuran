@@ -38,5 +38,12 @@ class QuranData(
             }
             return lQuran
         }
+
+        val NOTHING = -1
+        val LOADING = 0
+        val PLAYING = 1
+        val PAUSED = 2
     }
+
+    var state = NOTHING
 }

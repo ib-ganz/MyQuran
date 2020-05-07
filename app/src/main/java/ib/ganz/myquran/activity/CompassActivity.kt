@@ -35,6 +35,8 @@ class CompassActivity : BaseActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_compass)
 
+        bBack.onClick("kembali") { finish() }
+
         mSensorManager = getSystemService(SENSOR_SERVICE) as SensorManager
         fusedLocationProviderClient = LocationServices.getFusedLocationProviderClient(this)
         getLocation()
@@ -168,30 +170,35 @@ class CompassActivity : BaseActivity() {
     private fun onDegreeChange(degree: Float, qiblaDegree: Float) {
         if (degree in 357..360 || degree in 0..3) {
             if (curHeading != 0) {
+                vibrate()
                 speak { "anda menghadap ke utara" }
             }
             curHeading = 0
         }
         else if (degree in 87..93) {
             if (curHeading != 1) {
+                vibrate()
                 speak { "anda menghadap ke timur" }
             }
             curHeading = 1
         }
         else if (degree in 177..183) {
             if (curHeading != 2) {
+                vibrate()
                 speak { "anda menghadap ke selatan" }
             }
             curHeading = 2
         }
         else if (degree in 267..273) {
             if (curHeading != 3) {
+                vibrate()
                 speak { "anda menghadap ke barat" }
             }
             curHeading = 3
         }
         else if (qiblaDegree in 357..360 || qiblaDegree in 0..3) {
             if (curHeading != 4) {
+                vibrate()
                 speak { "anda menghadap ke kiblat" }
             }
             curHeading = 4

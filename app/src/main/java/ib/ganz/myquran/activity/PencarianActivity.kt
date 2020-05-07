@@ -10,6 +10,8 @@ import ib.ganz.myquran.R
 import ib.ganz.myquran.fragment.SearchKataFragment
 import ib.ganz.myquran.fragment.SearchSuaraFragment
 import ib.ganz.myquran.helper.Mp3Player
+import ib.ganz.myquran.kotlinstuff.then
+import ib.ganz.myquran.manager.PrefManager
 import kotlinx.android.synthetic.main.activity_pencarian.*
 
 
@@ -38,10 +40,14 @@ class PencarianActivity : BaseActivity() {
                 vibrate()
                 Mp3Player.stop()
                 if (p0 == 0) {
-                    speak { "pencarian ayat berdasarkan suara" }
+                    PrefManager.getSuara().then {
+                        speak { "pencarian ayat berdasarkan suara" }
+                    }
                 }
                 else {
-                    speak { "pencarian ayat berdasarkan kata" }
+                    PrefManager.getSuara().then {
+                        speak { "pencarian ayat berdasarkan kata" }
+                    }
                 }
             }
         })
@@ -53,7 +59,11 @@ class PencarianActivity : BaseActivity() {
     }
 
     override fun onTtsReady() {
-        speak { "apa sih kak?" }
-//        speak { "anda masuk di halaman pencarian ayat berdasarkan suara. geser ke kanan untuk masuk di halaman pencarian ayat berdasarkan kata." }
+//        speak { "apa sih kak?" }
+        speak { "anda masuk di halaman pencarian ayat berdasarkan suara. geser ke kanan untuk masuk di halaman pencarian ayat berdasarkan kata." }
+    }
+
+    fun stopSpeaking() {
+        speak { "" }
     }
 }

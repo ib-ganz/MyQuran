@@ -1,0 +1,124 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".activity.TTSIndoActivity">
+
+    <ImageView
+        app:layout_constraintBottom_toBottomOf="parent"
+        android:src="@drawable/bg_kompas"
+        android:adjustViewBounds="true"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"/>
+
+    <ImageView
+        android:id="@+id/i1"
+        android:src="@drawable/img_tts"
+        android:layout_marginTop="62dp"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        android:adjustViewBounds="true"
+        android:layout_width="120dp"
+        android:layout_height="wrap_content"/>
+
+    <TextView
+        android:id="@+id/t1"
+        android:layout_marginTop="32dp"
+        android:layout_marginStart="32dp"
+        android:layout_marginEnd="32dp"
+        app:layout_constraintTop_toBottomOf="@id/i1"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        android:fontFamily="@font/segoe_ui"
+        android:textColor="@color/colorMarine"
+        android:textSize="15sp"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:text="Aplikasi Tafsir For Blind menggunakan Text-To-Speech Engine untuk mengubah text menjadi suara" />
+
+    <TextView
+        android:id="@+id/t2"
+        android:layout_marginTop="10dp"
+        android:layout_marginStart="32dp"
+        android:layout_marginEnd="32dp"
+        app:layout_constraintTop_toBottomOf="@id/t1"
+        android:fontFamily="@font/segoe_ui"
+        android:textColor="@color/colorMarine"
+        android:textSize="15sp"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Sepertinya anda belum mengaktifkan pilihan bahasa Indonesia pada pengaturan Text-To-Speech di smartphone anda" />
+
+    <TextView
+        android:id="@+id/t3"
+        android:layout_marginTop="10dp"
+        android:layout_marginStart="32dp"
+        android:layout_marginEnd="32dp"
+        app:layout_constraintTop_toBottomOf="@id/t2"
+        android:fontFamily="@font/segoe_ui"
+        android:textColor="@color/colorMarine"
+        android:textSize="15sp"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Jika anda melewati ini, aplikasi Tafsir For Blind akan mengucapkan semua kata dalam aplikasi ini dengan menggunakan bahasa Inggris" />
+
+    <CheckBox
+        android:id="@+id/cbLewati"
+        android:layout_marginTop="18dp"
+        android:layout_marginStart="32dp"
+        app:layout_constraintTop_toBottomOf="@id/t3"
+        app:layout_constraintStart_toStartOf="parent"
+        android:text="Selalu lewati proses ini"
+        android:textColor="@color/colorMarine"
+        android:fontFamily="@font/segoe_ui"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"/>
+
+    <RelativeLayout
+        android:id="@+id/bAtur"
+        app:layout_constraintTop_toBottomOf="@id/cbLewati"
+        android:layout_marginTop="10dp"
+        android:layout_marginStart="32dp"
+        android:layout_marginEnd="32dp"
+        android:background="@drawable/btn_reset"
+        android:padding="10dp"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <TextView
+            android:textColor="@color/colorWhite"
+            android:fontFamily="@font/segoe_ui"
+            android:paddingBottom="2dp"
+            android:layout_centerInParent="true"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Atur Bahasa"/>
+
+    </RelativeLayout>
+
+    <RelativeLayout
+        android:id="@+id/bLewati"
+        app:layout_constraintTop_toBottomOf="@id/bAtur"
+        android:layout_marginTop="12dp"
+        android:layout_marginStart="32dp"
+        android:layout_marginEnd="32dp"
+        android:background="@drawable/btn_lewati"
+        android:padding="10dp"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <TextView
+            android:textColor="@color/colorMarine"
+            android:fontFamily="@font/segoe_ui"
+            android:paddingBottom="2dp"
+            android:layout_centerInParent="true"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Lewati"/>
+
+    </RelativeLayout>
+
+</android.support.constraint.ConstraintLayout>

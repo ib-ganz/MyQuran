@@ -4,6 +4,7 @@ import android.app.Activity
 import android.content.Context
 import android.content.pm.PackageManager
 import android.support.v4.app.ActivityCompat
+import android.util.Log
 import android.view.WindowManager
 import android.widget.Toast
 
@@ -17,6 +18,8 @@ fun Activity.imageOverlapStatusbar() = window.setFlags(WindowManager.LayoutParam
 fun Context.toast(f: () -> String) = Toast.makeText(this, f(), Toast.LENGTH_SHORT).show()
 
 fun Context.toast(s: String) = Toast.makeText(this, s, Toast.LENGTH_SHORT).show()
+
+fun Context.d(f: () -> String) = Log.d("logqu", f())
 
 
 fun Activity.getDefaultImgRequestCode() = 666
@@ -46,7 +49,7 @@ fun Activity.requestPermissions(permissions: Array<String>, permissionCode: Int 
     }
 }
 
-fun Activity.requestStoragePermission(onHasPermission: () -> Unit) {
+fun Activity.requestStoragePermission(onHasPermission: (() -> Unit)? = null) {
     requestPermissions(
         arrayOf(
             android.Manifest.permission.READ_EXTERNAL_STORAGE,

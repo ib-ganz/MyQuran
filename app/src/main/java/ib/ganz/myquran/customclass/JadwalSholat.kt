@@ -20,7 +20,6 @@ class JadwalItem(
     fun subuhEnd() = now().toCalendar().apply {
         setHour(shurooq.fromAmPm().toHour().toInt())
         setMinute(shurooq.fromAmPm().toMinute().toInt())
-//        setSecond(0)
     }
 
     fun dzuhurStart() = now().toCalendar().apply {
@@ -30,7 +29,6 @@ class JadwalItem(
     fun dzuhurEnd() = now().toCalendar().apply {
         setHour(asr.fromAmPm().toHour().toInt())
         setMinute(asr.fromAmPm().toMinute().toInt())
-//        setSecond(0)
     }
 
     fun asharStart() = now().toCalendar().apply {
@@ -40,7 +38,6 @@ class JadwalItem(
     fun asharEnd() = now().toCalendar().apply {
         setHour(maghrib.fromAmPm().toHour().toInt())
         setMinute(maghrib.fromAmPm().toMinute().toInt())
-//        setSecond(0)
     }
 
     fun maghribStart() = now().toCalendar().apply {
@@ -50,18 +47,25 @@ class JadwalItem(
     fun maghribEnd() = now().toCalendar().apply {
         setHour(isha.fromAmPm().toHour().toInt())
         setMinute(isha.fromAmPm().toMinute().toInt())
-//        setSecond(0)
     }
 
     fun isyaStart() = now().toCalendar().apply {
+        val curHour = getHour()
         setHour(isha.fromAmPm().toHour().toInt())
         setMinute(isha.fromAmPm().toMinute().toInt())
+
+        if (curHour < 5) {
+            add(Calendar.HOUR, -24)
+        }
     }
     fun isyaEnd() = now().toCalendar().apply {
+        val curHour = getHour()
         setHour(fajr.fromAmPm().toHour().toInt())
         setMinute(fajr.fromAmPm().toMinute().toInt())
-        add(Calendar.HOUR, 24)
-//        setSecond(0)
+
+        if (curHour > 5) {
+            add(Calendar.HOUR, 24)
+        }
     }
 }
 

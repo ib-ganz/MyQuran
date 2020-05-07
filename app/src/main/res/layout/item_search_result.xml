@@ -8,21 +8,33 @@
     android:padding="8dp">
 
     <TextView
-        android:id="@+id/tAyat"
-        android:textSize="20sp"
-        android:fontFamily="@font/me_quran"
-        android:layout_margin="8dp"
-        android:text="asasasas"
+        android:id="@+id/tLokasi"
+        android:text="sasasasasasasas"
+        android:textColor="@color/colorMarine"
+        android:fontFamily="@font/segoe_ui_semibold"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toTopOf="parent"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"/>
+
+    <TextView
+        android:id="@+id/tAyat"
+        android:fontFamily="@font/me_quran"
+        android:layout_marginStart="8dp"
+        android:layout_marginEnd="8dp"
+        android:text="asasasasqqqqqqqqqqqqqqqqqqqqqqqqq"
+        app:layout_constraintTop_toBottomOf="@id/tLokasi"
         app:layout_constraintEnd_toEndOf="parent"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"/>
 
     <TextView
-        android:id="@+id/tLokasi"
+        android:id="@+id/tTafsir"
         android:text="sasasasasasasas"
         android:textColor="@color/colorMarine"
-        android:fontFamily="@font/segoe_ui_semibold"
+        android:fontFamily="@font/segoe_ui"
+        android:textStyle="italic"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/tAyat"
         android:layout_width="wrap_content"

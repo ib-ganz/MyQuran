@@ -5,6 +5,12 @@
         <item name="android:colorAccent">@color/colorAccent</item>
     </style>
 
+    <style name="AppTheme.NoActionBarMarine" parent="AppTheme.NoActionBar">
+        <item name="android:colorPrimary">@color/colorMarine</item>
+        <item name="android:colorAccent">@color/colorMarineDark</item>
+        <item name="android:statusBarColor">@color/colorMarineDark</item>
+    </style>
+
     <style name="AppTheme.Transparent">
         <item name="windowActionBar">false</item>
         <item name="windowNoTitle">true</item>

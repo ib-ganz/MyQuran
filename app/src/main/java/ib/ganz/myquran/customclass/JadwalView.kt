@@ -6,7 +6,9 @@ import android.app.Activity
 import android.content.Context
 import android.content.pm.PackageManager
 import android.content.res.ColorStateList
+import android.location.Address
 import android.location.Geocoder
+import android.location.Location
 import android.os.Build
 import android.os.Handler
 import android.support.v4.app.ActivityCompat
@@ -21,13 +23,11 @@ import com.google.android.gms.location.LocationServices
 import ib.ganz.myquran.R
 import ib.ganz.myquran.kotlinstuff.*
 import ib.ganz.myquran.kotlinstuff.extfun.requestLocationPermission
+import ib.ganz.myquran.manager.PrefManager
 import ib.ganz.myquran.network.ApiClient
 import ib.ganz.myquran.network.GxonConverterFaxtory
 import kotlinx.android.synthetic.main.view_jadwal.view.*
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.launch
-import kotlinx.coroutines.withContext
+import kotlinx.coroutines.*
 import retrofit2.Retrofit
 import retrofit2.converter.scalars.ScalarsConverterFactory
 import retrofit2.http.GET
@@ -106,10 +106,10 @@ class JadwalView : LinearLayout {
     }
 
     private fun run() {
-        Log.d("kompas", "running")
+        Log.d("kompas", "running: $attemptCount")
         attemptCount++
-        try {
-            cs?.launch {
+        cs?.launch {
+            try {
                 val city = getCity() ?: "yogyakarta"
                 val jadwalData = withContext(Dispatchers.IO) { service.getJadwal(city, apiKey) }
                 val jadwalItem = jadwalData.items[0]
@@ -120,10 +120,10 @@ class JadwalView : LinearLayout {
                 setWhatz(selectedTime, jadwalItem)
                 progressBar.beGone()
             }
-        }
-        catch (e: Exception) {
-            if (attemptCount < 5) {
-                start()
+            catch (e: Exception) {
+                if (attemptCount < 5) {
+                    start()
+                }
             }
         }
     }
@@ -134,17 +134,35 @@ class JadwalView : LinearLayout {
             (context as Activity).requestLocationPermission {  }
         }
         else {
-            fusedLocationProviderClient.lastLocation.addOnSuccessListener {
-                if (it != null) {
-                    val geocoder = Geocoder(context, Locale.getDefault())
-                    val addresses = geocoder.getFromLocation(it.latitude, it.longitude, 1)
-                    val cityName = addresses[0].getAddressLine(0).toLowerCase().split("kabupaten")[1].split(",")[0].trim()
-                    x.resume(cityName)
-                }
-                else {
-                    x.resume(null)
-                }
+            cs!!.launch {
+                val loc = getLocation()
+                val geocoder = Geocoder(context, Locale.getDefault())
+                val addresses = getAddressesAsync(geocoder, loc).await()
+                val cityName =
+                    try { addresses[0].getAddressLine(0).toLowerCase().split("kabupaten")[1].split(",")[0].trim() }
+                    catch (e: java.lang.Exception) { null }
+
+                x.resume(cityName)
             }
+        }
+    }
+
+    private suspend fun getLocation() = suspendCoroutine<Location?> { c ->
+        fusedLocationProviderClient.lastLocation.addOnSuccessListener {
+            c.resume(it)
+        }
+    }
+
+    private fun getAddressesAsync(geocoder: Geocoder, location: Location?) = cs!!.async(Dispatchers.IO) {
+        if (location == null) {
+            return@async listOf<Address>()
+        }
+
+        try {
+            geocoder.getFromLocation(location.latitude, location.longitude, 1)
+        }
+        catch (e: java.lang.Exception) {
+            listOf<Address>()
         }
     }
 
@@ -162,6 +180,7 @@ class JadwalView : LinearLayout {
         Log.d("kompas", "isyaStart: " + j.isyaStart().timeInMillis)
         Log.d("kompas", "isyaEnd: " + j.isyaEnd().timeInMillis)
         Log.d("kompas", "now: " + now.timeInMillis)
+
         return when {
             now.before(j.subuhEnd()) && now.after(j.subuhStart()) -> 0
             now.before(j.dzuhurEnd()) && now.after(j.dzuhurStart()) -> 1
@@ -265,7 +284,9 @@ class JadwalView : LinearLayout {
         tWhat.text = what
         rootJadwal.click {
             vibrator?.invoke()
-            speaker?.invoke(what)
+            PrefManager.getSuara().then {
+                speaker?.invoke(what)
+            }
         }
     }
 }

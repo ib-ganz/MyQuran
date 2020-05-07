@@ -54,6 +54,10 @@ fun View.toggleVisibility(b: Boolean?) {
     visibility = if (b == true) View.VISIBLE else View.GONE
 }
 
+fun View.toggleInvisibility(b: Boolean?) {
+    visibility = if (b == true) View.VISIBLE else View.INVISIBLE
+}
+
 //------------------------------ IMAGEVIEW ------------------------------//
 
 infix fun ImageView.useImage(id: Int) = setImageResource(id)

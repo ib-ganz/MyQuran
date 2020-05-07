@@ -72,6 +72,7 @@
         <TextView
             android:id="@+id/tSubuh"
             android:text="Subuh"
+            android:textSize="12sp"
             android:textColor="@color/colorPrimaryDark"
             android:fontFamily="@font/segoe_ui_semilight"
             android:layout_width="wrap_content"
@@ -122,6 +123,7 @@
         <TextView
             android:id="@+id/tDzuhur"
             android:text="Dzuhur"
+            android:textSize="12sp"
             android:textColor="@color/colorPrimaryDark"
             android:fontFamily="@font/segoe_ui_semilight"
             android:layout_width="wrap_content"
@@ -172,6 +174,7 @@
         <TextView
             android:id="@+id/tAshar"
             android:text="Ashar"
+            android:textSize="12sp"
             android:textColor="@color/colorPrimaryDark"
             android:fontFamily="@font/segoe_ui_semilight"
             android:layout_width="wrap_content"
@@ -222,6 +225,7 @@
         <TextView
             android:id="@+id/tMagrib"
             android:text="Magrib"
+            android:textSize="12sp"
             android:textColor="@color/colorPrimaryDark"
             android:fontFamily="@font/segoe_ui_semilight"
             android:layout_width="wrap_content"
@@ -272,6 +276,7 @@
         <TextView
             android:id="@+id/tIsya"
             android:text="Isya'"
+            android:textSize="12sp"
             android:textColor="@color/colorPrimaryDark"
             android:fontFamily="@font/segoe_ui_semilight"
             android:layout_width="wrap_content"

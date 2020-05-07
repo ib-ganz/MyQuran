@@ -11,14 +11,17 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import ib.ganz.myquran.R
+import ib.ganz.myquran.activity.PencarianActivity
 import ib.ganz.myquran.database.AyatData
 import ib.ganz.myquran.helper.Mp3Player
 import ib.ganz.myquran.kotlinstuff.adapter
 import ib.ganz.myquran.kotlinstuff.beGone
 import ib.ganz.myquran.kotlinstuff.replaceWith
 import ib.ganz.myquran.kotlinstuff.toArabicNumber
+import ib.ganz.myquran.manager.PrefManager
 import kotlinx.android.synthetic.main.fragment_search_suara.*
 import kotlinx.android.synthetic.main.item_search_result.*
+import kotlinx.coroutines.async
 import kotlinx.coroutines.launch
 
 
@@ -34,7 +37,11 @@ class SearchSuaraFragment : BaseFragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        bStart.onClick("cari ayat", { Mp3Player.stop() }) { rekam() }
+        val f = {
+            Mp3Player.stop()
+            (activity as PencarianActivity).stopSpeaking()
+        }
+        bStart.onClick("cari ayat", f) { rekam() }
         rvSearch.adapter = searchAdapter
         rvSearch.addItemDecoration(DividerItemDecoration(a, RecyclerView.VERTICAL))
     }
@@ -50,7 +57,7 @@ class SearchSuaraFragment : BaseFragment() {
             val wRes = if (lAyat.size > 0) "Ditemukan sebanyak ${lAyat.size} ayat" else "Ayat tidak ditemukan"
             speak { wRes }
             tRes.text = wRes
-            tKey.text = "dengan kata kunci ${res.joinToString(", ")}"
+            tKey.text = "dengan kata kunci: ${res.joinToString(", ")}"
             tFirst.beGone()
         }
     }
@@ -59,12 +66,20 @@ class SearchSuaraFragment : BaseFragment() {
         val la = lAyat[adapterPosition]
         tAyat.text = "${la.text}    \uFD3F${la.nomorAyat.toArabicNumber()}\uFD3E    "
         tLokasi.text = "${la.namaSurat}: ${la.nomorAyat}"
+        tTafsir.text = la.tafsir
 
-        val speech = "surat ${la.namaSurat.replace("`", "")} ayat ${la.nomorAyat}"
-        root.onClick(speech, adapterPosition, { Mp3Player.stop() }) {
+        tAyat.textSize = PrefManager.getQuranSize()
+        tTafsir.textSize = PrefManager.getTafsirSize()
+
+        val speechAyat = "surat ${la.namaSurat.replace("`", "")} ayat ${la.nomorAyat}"
+        tAyat.onClick(speechAyat, adapterPosition, { Mp3Player.stop() }) {
             launch {
                 Mp3Player.play(la) { speak { it } }
             }
+        }
+        val speechTafsir = "tafsir surat ${la.namaSurat.replace("`", "")} ayat ${la.nomorAyat}"
+        tTafsir.onClick(speechTafsir, adapterPosition, { Mp3Player.stop() }) {
+            speak { la.tafsir }
         }
     }
 
